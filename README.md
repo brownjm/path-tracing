@@ -60,7 +60,6 @@ int main() {
   img.write("image.ppm");
 }
 ```
-produces:
 ![glass-sphere.png](./glass-sphere.png)
 
 Another example shows colors and specular reflections:
