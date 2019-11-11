@@ -15,4 +15,10 @@ const Color Red = {0.8, 0.2, 0.2};
 const Color Green = {0.2, 0.8, 0.2};
 const Color Blue = {0.2, 0.2, 0.8};
 
+const Color Orange = {1.0, 0.5, 0.0};
+const Color Yellow = {1.0, 1.0, 0.0};
+const Color Fuschia = {1.0, 0.0, 1.0};
+
+const Color Sun = {1.0, 1.0, 0.95};
+
 #endif // COLOR_H_
