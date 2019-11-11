@@ -15,11 +15,6 @@ add_executable(path-tracing.out
 
 target_compile_options(path-tracing.out PUBLIC -Ofast -Wall -Wextra -pedantic -flto)
 target_link_libraries(path-tracing.out ${SOURCES} -flto)
-
-add_executable(combine-runs.out
-  src/combine-runs.cc
-  src/image.cc
-  )
   
 # MPI executable
 find_package(MPI)
