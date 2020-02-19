@@ -82,7 +82,8 @@ public:
 
 
 std::ostream& operator<<(std::ostream& os, const Vector3D& v);
-
+std::istream& operator>>(std::istream& is, Vector3D& v);
+  
 inline Vector3D operator+(Vector3D lhs, const Vector3D& rhs) {
   lhs += rhs;
   return lhs;
