@@ -11,48 +11,40 @@
 #include "tracer.h"
 #include "color.h"
 #include "random.h"
+#include "interpreter.h"
 
 int main(int argc, char* argv[]) {
   MPI_Init(&argc, &argv);
   int rank, processors;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &processors);
+  
   if (processors < 2) {
     std::cout << "Please launch program with at least 2 processors\n";
+    MPI_Finalize();
     return 1;
   }
-  
-  const int width = 1280;
-  const int height = 720;
-  const int samples = 50;
-  const int max_depth = 5;
-  
-  std::vector<Sphere> world = {// Floor
-        		       Sphere(Vector3D(0, 0, -2000), 2000, diffuse, White),
-                               
-        		       // Spheres
-                               Sphere(Vector3D(0, -1.1, 1), 1, glass, Red),
-        		       Sphere(Vector3D(2.5, -3, 2), 2, glass, White),
-        		       Sphere(Vector3D(-1, -2.5, 0.5), 0.5, diffuse, Blue),
-                               Sphere(Vector3D(0.3, -4, 0.3), 0.3, diffuse, Green),
-                               // Sphere(Vector3D(0, -10, 1), 1, specular, Lightgray),
-                               // Sphere(Vector3D(-3, -10, 1), 1, specular, White),
 
-        		       // Light
-                               Sphere(Vector3D(0, 100, 100), 100, light, White),
-  };
+  if (argc < 2) {
+    if (rank == 0) {
+      std::cout << "Please provide an input filename" << std::endl;
+    }
+    MPI_Finalize();
+    return 1;
+  }
 
-
-  Vector3D pos(-5, -20, 4);
-  Vector3D tar(0, 0, 1);
-  Vector3D up(0, 0, 1);
-  double fov = 20;
-  double aspect = double(width) / height;
-  Camera camera(pos, tar, up, fov, aspect);
+  Interpreter interpreter(argv[1]);
+  Camera camera = interpreter.get_camera();
+  int width = interpreter.image_width;
+  int height = interpreter.image_height;
+  int samples = interpreter.rays_number;
+  int depth = interpreter.rays_depth;
+  std::string filename = interpreter.image_filename;
+  std::vector<Sphere>& world = interpreter.objects;
 
   if (rank == 0) {
     bool print_status = true;
-    std::vector<Color> colors = trace_scene(world, camera, width, height, samples, max_depth,
+    std::vector<Color> colors = trace_scene(world, camera, width, height, samples, depth,
                                             print_status);
     int N = width*height*3;
     std::vector<double> values(N);
@@ -71,12 +63,12 @@ int main(int argc, char* argv[]) {
       c /= processors;
     }
     
-    Image img(height, width, colors);
-    img.write("image.ppm");
+    Image img(width, height, colors);
+    img.write(filename);
   }
   else {
     bool print_status = false;
-    std::vector<Color> colors = trace_scene(world, camera, width, height, samples, max_depth,
+    std::vector<Color> colors = trace_scene(world, camera, width, height, samples, depth,
                                             print_status);
     int N = width*height*3;
     std::vector<double> values(N);
