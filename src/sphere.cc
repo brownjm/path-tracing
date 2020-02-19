@@ -23,7 +23,7 @@
   where d = b^2 - a * c
 */
 
-Sphere::Sphere(Vector3D cen, double r, std::function<Ray(Ray, Hit)> mat, Color col)
+Sphere::Sphere(Vector3D cen, double r, Material mat, Color col)
   :center(cen), radius(r), material(mat), color(col) {}
 
 Hit Sphere::intersect(const Ray& ray) const {

@@ -12,14 +12,14 @@
 
 class Sphere {
 public:
-  Sphere(Vector3D center, double radius, std::function<Ray(Ray, Hit)> material,
+  Sphere(Vector3D center, double radius, Material material,
 	 Color color);
 	 
   Hit intersect(const Ray& ray) const;
 
   Vector3D center;
   double radius;
-  std::function<Ray(Ray, Hit)> material;
+  Material material;
   Color color;
 };
 

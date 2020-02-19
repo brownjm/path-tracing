@@ -1,9 +1,13 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
+#include <functional>
+
 class Ray;
 class Hit;
 class Vector3D;
+
+typedef std::function<Ray(const Ray&, const Hit&)> Material;
 
 Ray diffuse(const Ray& ray, const Hit& hit);
 Ray specular(const Ray& ray, const Hit& hit);
