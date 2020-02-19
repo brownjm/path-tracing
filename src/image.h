@@ -9,11 +9,11 @@
 
 class Image {
 public:
-  Image(int numrows, int numcols, std::vector<Color> pixels);
+  Image(int width, int height, std::vector<Color> pixels);
   void write(const std::string& filename);
 
 private:
-  int nrows, ncols;
+  int width, height;
   std::vector<Color> pixels;
 };
 
